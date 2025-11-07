@@ -28,12 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            request_global_catalog = new Button();
+            SuspendLayout();
+            // 
+            // request_global_catalog
+            // 
+            request_global_catalog.BackColor = Color.Gold;
+            request_global_catalog.Font = new Font("Modern No. 20", 18F);
+            request_global_catalog.Location = new Point(268, 571);
+            request_global_catalog.Name = "request_global_catalog";
+            request_global_catalog.Size = new Size(281, 63);
+            request_global_catalog.TabIndex = 0;
+            request_global_catalog.Text = "request global catalog";
+            request_global_catalog.UseVisualStyleBackColor = false;
+            request_global_catalog.Click += button1_Click;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(841, 684);
+            Controls.Add(request_global_catalog);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            IsMdiContainer = true;
+            Name = "Form1";
+            Text = "Form1";
+            Load += Form1_Load;
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private Button request_global_catalog;
     }
 }
