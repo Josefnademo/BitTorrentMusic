@@ -48,3 +48,7 @@ La maquette de l’interface utilisateur (UI) a été réalisée sur Figma
 La planification du projet a été réalisée en format `.md`
 
 👉 Lien vers la [Planification.md]()
+
+## Webographie:
+
+- [online-tools](https://emn178.github.io/online-tools/sha1_checksum.html)
