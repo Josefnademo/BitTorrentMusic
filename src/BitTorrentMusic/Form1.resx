@@ -118,6 +118,94 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="request_global_catalog.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Modern No. 20, 18pt</value>
+  </data>
+  <data name="request_global_catalog.Location" type="System.Drawing.Point, System.Drawing">
+    <value>268, 571</value>
+  </data>
+  <data name="request_global_catalog.Size" type="System.Drawing.Size, System.Drawing">
+    <value>281, 63</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="request_global_catalog.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="request_global_catalog.Text" xml:space="preserve">
+    <value>request global catalog</value>
+  </data>
+  <data name="&gt;&gt;request_global_catalog.Name" xml:space="preserve">
+    <value>request_global_catalog</value>
+  </data>
+  <data name="&gt;&gt;request_global_catalog.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;request_global_catalog.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;request_global_catalog.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="Browse_button.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Modern No. 20, 11.249999pt</value>
+  </data>
+  <data name="Browse_button.Location" type="System.Drawing.Point, System.Drawing">
+    <value>402, 21</value>
+  </data>
+  <data name="Browse_button.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="Browse_button.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="Browse_button.Text" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="&gt;&gt;Browse_button.Name" xml:space="preserve">
+    <value>Browse_button</value>
+  </data>
+  <data name="&gt;&gt;Browse_button.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Browse_button.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;Browse_button.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="textBox_Research.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 21</value>
+  </data>
+  <data name="textBox_Research.Size" type="System.Drawing.Size, System.Drawing">
+    <value>384, 23</value>
+  </data>
+  <data name="textBox_Research.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;textBox_Research.Name" xml:space="preserve">
+    <value>textBox_Research</value>
+  </data>
+  <data name="&gt;&gt;textBox_Research.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox_Research.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;textBox_Research.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="bindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>7, 15</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>841, 684</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAIAYAAAEAIABAAwAAFgAAACgAAAAgAAAADAAAAAEAIAAAAAAAAAMAABMLAAATCwAAAAAAAAAA
@@ -136,5 +224,20 @@
         Jf8mJib/Jycn/ycnJ/8oKCj/KSkp/yopKf8rKyv/LCws/y0tLf8tLS3/Li4u/y8vL/8AAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAA=
 </value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>BitTorrentMusic</value>
+  </data>
+  <data name="&gt;&gt;bindingSource1.Name" xml:space="preserve">
+    <value>bindingSource1</value>
+  </data>
+  <data name="&gt;&gt;bindingSource1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.BindingSource, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MainMenuUI</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

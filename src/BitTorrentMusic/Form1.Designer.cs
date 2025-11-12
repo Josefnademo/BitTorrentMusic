@@ -28,40 +28,58 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuUI));
             request_global_catalog = new Button();
+            Browse_button = new Button();
+            textBox_Research = new TextBox();
+            bindingSource1 = new BindingSource(components);
+            ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             SuspendLayout();
             // 
             // request_global_catalog
             // 
             request_global_catalog.BackColor = Color.Gold;
-            request_global_catalog.Font = new Font("Modern No. 20", 18F);
-            request_global_catalog.Location = new Point(268, 571);
+            resources.ApplyResources(request_global_catalog, "request_global_catalog");
             request_global_catalog.Name = "request_global_catalog";
-            request_global_catalog.Size = new Size(281, 63);
-            request_global_catalog.TabIndex = 0;
-            request_global_catalog.Text = "request global catalog";
             request_global_catalog.UseVisualStyleBackColor = false;
             request_global_catalog.Click += button1_Click;
             // 
+            // Browse_button
+            // 
+            Browse_button.BackColor = Color.Gold;
+            resources.ApplyResources(Browse_button, "Browse_button");
+            Browse_button.Name = "Browse_button";
+            Browse_button.UseVisualStyleBackColor = false;
+            Browse_button.Click += button1_Click_1;
+            // 
+            // textBox_Research
+            // 
+            resources.ApplyResources(textBox_Research, "textBox_Research");
+            textBox_Research.Name = "textBox_Research";
+            // 
             // MainMenuUI
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(841, 684);
+            Controls.Add(textBox_Research);
+            Controls.Add(Browse_button);
             Controls.Add(request_global_catalog);
-            Icon = (Icon)resources.GetObject("$this.Icon");
             IsMdiContainer = true;
             Name = "MainMenuUI";
             Opacity = 0.1D;
-            Text = "BitTorrentMusic";
             TransparencyKey = Color.FromArgb(64, 0, 64);
             Load += Form1_Load;
+            ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Button request_global_catalog;
+        private Button Browse_button;
+        private TextBox textBox_Research;
+        private BindingSource bindingSource1;
     }
 }
