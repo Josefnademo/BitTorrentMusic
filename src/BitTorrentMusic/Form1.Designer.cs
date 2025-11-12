@@ -1,6 +1,6 @@
 ﻿namespace BitTorrentMusic
 {
-    partial class Form1
+    partial class MainMenuUI
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuUI));
             request_global_catalog = new Button();
             SuspendLayout();
             // 
@@ -44,7 +44,7 @@
             request_global_catalog.UseVisualStyleBackColor = false;
             request_global_catalog.Click += button1_Click;
             // 
-            // Form1
+            // MainMenuUI
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -52,8 +52,10 @@
             Controls.Add(request_global_catalog);
             Icon = (Icon)resources.GetObject("$this.Icon");
             IsMdiContainer = true;
-            Name = "Form1";
-            Text = "Form1";
+            Name = "MainMenuUI";
+            Opacity = 0.1D;
+            Text = "BitTorrentMusic";
+            TransparencyKey = Color.FromArgb(64, 0, 64);
             Load += Form1_Load;
             ResumeLayout(false);
         }
