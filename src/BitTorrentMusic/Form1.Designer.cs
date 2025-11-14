@@ -34,7 +34,14 @@
             Browse_button = new Button();
             textBox_Research = new TextBox();
             bindingSource1 = new BindingSource(components);
+            TimoutDelayPicker = new TrackBar();
+            dataGridViewLocal = new DataGridView();
+            dataGridViewGlobal = new DataGridView();
+            labelTimeout = new Label();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)TimoutDelayPicker).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewLocal).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewGlobal).BeginInit();
             SuspendLayout();
             // 
             // request_global_catalog
@@ -55,22 +62,60 @@
             // 
             // textBox_Research
             // 
+            textBox_Research.BackColor = Color.Gray;
             resources.ApplyResources(textBox_Research, "textBox_Research");
             textBox_Research.Name = "textBox_Research";
+            // 
+            // TimoutDelayPicker
+            // 
+            resources.ApplyResources(TimoutDelayPicker, "TimoutDelayPicker");
+            TimoutDelayPicker.BackColor = Color.Gray;
+            TimoutDelayPicker.Cursor = Cursors.Hand;
+            TimoutDelayPicker.Maximum = 300;
+            TimoutDelayPicker.Name = "TimoutDelayPicker";
+            TimoutDelayPicker.SmallChange = 2;
+            // 
+            // dataGridViewLocal
+            // 
+            dataGridViewLocal.BackgroundColor = Color.Wheat;
+            dataGridViewLocal.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            resources.ApplyResources(dataGridViewLocal, "dataGridViewLocal");
+            dataGridViewLocal.Name = "dataGridViewLocal";
+            // 
+            // dataGridViewGlobal
+            // 
+            dataGridViewGlobal.BackgroundColor = Color.Wheat;
+            dataGridViewGlobal.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            resources.ApplyResources(dataGridViewGlobal, "dataGridViewGlobal");
+            dataGridViewGlobal.Name = "dataGridViewGlobal";
+            // 
+            // labelTimeout
+            // 
+            resources.ApplyResources(labelTimeout, "labelTimeout");
+            labelTimeout.BackColor = Color.Transparent;
+            labelTimeout.ForeColor = Color.AliceBlue;
+            labelTimeout.Name = "labelTimeout";
+            labelTimeout.Click += labelTimeout_Click;
             // 
             // MainMenuUI
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveBorder;
+            Controls.Add(labelTimeout);
+            Controls.Add(dataGridViewGlobal);
+            Controls.Add(dataGridViewLocal);
+            Controls.Add(TimoutDelayPicker);
             Controls.Add(textBox_Research);
             Controls.Add(Browse_button);
             Controls.Add(request_global_catalog);
-            IsMdiContainer = true;
             Name = "MainMenuUI";
-            Opacity = 0.1D;
-            TransparencyKey = Color.FromArgb(64, 0, 64);
+            TransparencyKey = Color.White;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)TimoutDelayPicker).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewLocal).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewGlobal).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -81,5 +126,9 @@
         private Button Browse_button;
         private TextBox textBox_Research;
         private BindingSource bindingSource1;
+        private TrackBar TimoutDelayPicker;
+        private DataGridView dataGridViewLocal;
+        private DataGridView dataGridViewGlobal;
+        private Label labelTimeout;
     }
 }
