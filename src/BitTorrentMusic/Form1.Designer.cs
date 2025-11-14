@@ -81,6 +81,7 @@
             dataGridViewLocal.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             resources.ApplyResources(dataGridViewLocal, "dataGridViewLocal");
             dataGridViewLocal.Name = "dataGridViewLocal";
+            dataGridViewLocal.CellContentClick += dataGridViewLocal_CellContentClick;
             // 
             // dataGridViewGlobal
             // 
@@ -88,6 +89,7 @@
             dataGridViewGlobal.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             resources.ApplyResources(dataGridViewGlobal, "dataGridViewGlobal");
             dataGridViewGlobal.Name = "dataGridViewGlobal";
+            dataGridViewGlobal.CellContentClick += dataGridViewGlobal_CellContentClick;
             // 
             // labelTimeout
             // 
