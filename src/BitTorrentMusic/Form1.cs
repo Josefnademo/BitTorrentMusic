@@ -28,7 +28,7 @@ namespace BitTorrentMusic
             SetupGlobalGrid();
 
             StyleDataGrid(dataGridViewLocal);
-            StyleDataGrid(dataGridViewGlobal); 
+            StyleDataGrid(dataGridViewGlobal);
         }
 
         private void LoadLocalSongs(string folderPath)
@@ -85,17 +85,20 @@ namespace BitTorrentMusic
 
 
 
-        private void LoadGlobalSongs(string folderPath) {
-        dataGridViewGlobal.Rows.Clear();  //Clearing all rows of global dataGrid
+        private void LoadGlobalSongs(string folderPath)
+        {
+            dataGridViewGlobal.Rows.Clear();  //Clearing all rows of global dataGrid
 
 
         }
 
+        // request global catalog Button
         private void button1_Click(object sender, EventArgs e)
         {
 
         }
 
+        // Browse local files Button
         private void button1_Click_1(object sender, EventArgs e)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
@@ -123,7 +126,7 @@ namespace BitTorrentMusic
         }
 
         private void dataGridViewGlobal_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        { 
+        {
         }
 
         private void SetupLocalGrid()
@@ -167,7 +170,7 @@ namespace BitTorrentMusic
             grid.BorderStyle = BorderStyle.None;
 
             grid.EnableHeadersVisualStyles = false;
-            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(203,178,107);
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(203, 178, 107);
             grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
             grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
@@ -200,5 +203,9 @@ namespace BitTorrentMusic
 
         }
 
+        private void TimoutDelayPicker_Scroll(object sender, EventArgs e)
+        {
+
+        }
     }
 }
