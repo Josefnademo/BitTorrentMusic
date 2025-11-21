@@ -38,6 +38,8 @@
             dataGridViewLocal = new DataGridView();
             dataGridViewGlobal = new DataGridView();
             labelTimeout = new Label();
+            label1 = new Label();
+            label2 = new Label();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TimoutDelayPicker).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewLocal).BeginInit();
@@ -99,11 +101,25 @@
             labelTimeout.Name = "labelTimeout";
             labelTimeout.Click += labelTimeout_Click;
             // 
+            // label1
+            // 
+            resources.ApplyResources(label1, "label1");
+            label1.BackColor = Color.NavajoWhite;
+            label1.Name = "label1";
+            // 
+            // label2
+            // 
+            resources.ApplyResources(label2, "label2");
+            label2.BackColor = Color.NavajoWhite;
+            label2.Name = "label2";
+            // 
             // MainMenuUI
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveBorder;
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(labelTimeout);
             Controls.Add(dataGridViewGlobal);
             Controls.Add(dataGridViewLocal);
@@ -132,5 +148,7 @@
         private DataGridView dataGridViewLocal;
         private DataGridView dataGridViewGlobal;
         private Label labelTimeout;
+        private Label label1;
+        private Label label2;
     }
 }

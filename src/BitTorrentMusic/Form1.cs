@@ -1,6 +1,15 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
-using System.Diagnostics;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;          // Для работы с Directory, FileInfo, Path
+using System.Diagnostics;
 using TagLib;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -22,11 +31,27 @@ namespace BitTorrentMusic
             StyleDataGrid(dataGridViewGlobal); 
         }
 
-        private void LoadLocalSongs(string folderPath) { 
+        private void LoadLocalSongs(string folderPath)
+        {
+            dataGridViewLocal.Rows.Clear();
 
-        dataGridViewLocal.Rows.Clear();  //Clearing all rows of local dataGrid
+            string[] extensions = { "*.mp3", "*.wav", "*.ogg" };
+            List<string> files = new List<string>();
 
-            foreach (string file in Directory.GetFiles(folderPath, "*.mp3"))
+            // Load files for each extension
+            foreach (string ext in extensions)
+            {
+                try
+                {
+                    files.AddRange(Directory.GetFiles(folderPath, ext, SearchOption.TopDirectoryOnly)); //for only current directory
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error scanning folder with {ext}: {ex.Message}");
+                }
+            }
+
+            foreach (string file in files)
             {
                 try
                 {
@@ -46,20 +71,18 @@ namespace BitTorrentMusic
                         title,
                         artist,
                         year,
-                        duration.ToString(@"mm\\:ss"),
-                        $"{size / 1024 / 1024} MB",
-                        file // path - hidden column
+                        duration.ToString(@"mm\:ss"),
+                        $"{Math.Round(size / 1024f / 1024f, 2)} MB",
+                        file
                     );
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Error while reading {file}: {ex.Message}");
-                    continue;
+                    Debug.WriteLine($"Error reading tags from {file}: {ex.Message}");
                 }
-
             }
-        
         }
+
 
 
         private void LoadGlobalSongs(string folderPath) {
@@ -80,7 +103,7 @@ namespace BitTorrentMusic
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
                     textBox_Research.Text = dialog.SelectedPath; // show the path
-                    LoadLocalSongs(dialog.SelectedPath);         // charge all mp3
+                    LoadLocalSongs(dialog.SelectedPath);         // charge all (wav, ogg, mp3)
                 }
             }
         }
@@ -140,15 +163,15 @@ namespace BitTorrentMusic
 
         private void StyleDataGrid(DataGridView grid)
         {
-            grid.BackgroundColor = Color.White;
+            grid.BackgroundColor = Color.FromArgb(203, 178, 107);
             grid.BorderStyle = BorderStyle.None;
 
             grid.EnableHeadersVisualStyles = false;
-            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(240, 240, 240);
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(203,178,107);
             grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
             grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
-            grid.DefaultCellStyle.BackColor = Color.White;
+            grid.DefaultCellStyle.BackColor = Color.FromArgb(203, 178, 107);
             grid.DefaultCellStyle.ForeColor = Color.Black;
             grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(200, 220, 255);
             grid.DefaultCellStyle.SelectionForeColor = Color.Black;
@@ -163,7 +186,7 @@ namespace BitTorrentMusic
             grid.AllowUserToResizeRows = false;
             grid.AllowUserToResizeColumns = false;
 
-            grid.GridColor = Color.FromArgb(200, 200, 200);
+            grid.GridColor = Color.Black;
 
             grid.RowHeadersVisible = false;
 
@@ -173,6 +196,8 @@ namespace BitTorrentMusic
             grid.DefaultCellStyle.Font = new Font("Segoe UI", 10);
             grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+
         }
 
     }

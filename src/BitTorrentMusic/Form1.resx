@@ -121,11 +121,15 @@
   <data name="request_global_catalog.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 18pt</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="request_global_catalog.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
   <data name="request_global_catalog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>268, 571</value>
+    <value>374, 613</value>
   </data>
   <data name="request_global_catalog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>281, 63</value>
+    <value>339, 76</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="request_global_catalog.TabIndex" type="System.Int32, mscorlib">
@@ -144,10 +148,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;request_global_catalog.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>8</value>
   </data>
   <data name="Browse_button.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 11.249999pt</value>
+  </data>
+  <data name="Browse_button.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="Browse_button.Location" type="System.Drawing.Point, System.Drawing">
     <value>508, 21</value>
@@ -171,7 +178,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Browse_button.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>7</value>
   </data>
   <data name="textBox_Research.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 11.999998pt</value>
@@ -198,13 +205,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;textBox_Research.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <metadata name="bindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <data name="TimoutDelayPicker.AutoSize" type="System.Boolean, mscorlib">
     <value>False</value>
+  </data>
+  <data name="TimoutDelayPicker.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="TimoutDelayPicker.Location" type="System.Drawing.Point, System.Drawing">
     <value>340, 59</value>
@@ -225,13 +235,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;TimoutDelayPicker.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="dataGridViewLocal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>34, 152</value>
+    <value>12, 164</value>
   </data>
   <data name="dataGridViewLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>365, 405</value>
+    <value>512, 405</value>
   </data>
   <data name="dataGridViewLocal.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -246,13 +256,13 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dataGridViewLocal.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
   <data name="dataGridViewGlobal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>440, 152</value>
+    <value>565, 164</value>
   </data>
   <data name="dataGridViewGlobal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>365, 405</value>
+    <value>523, 405</value>
   </data>
   <data name="dataGridViewGlobal.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -267,7 +277,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dataGridViewGlobal.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="labelTimeout.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -297,10 +307,76 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTimeout.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Modern No. 20, 20.25pt</value>
+  </data>
+  <data name="label1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>112, 132</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>301, 29</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Local media files  catalog</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Modern No. 20, 20.25pt</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>673, 132</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>312, 29</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Global media files  catalog</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>25</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>7, 15</value>
@@ -1395,7 +1471,7 @@
 </value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>841, 684</value>
+    <value>1100, 782</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 9.75pt</value>
