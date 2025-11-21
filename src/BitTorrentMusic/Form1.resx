@@ -241,7 +241,7 @@
     <value>12, 164</value>
   </data>
   <data name="dataGridViewLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>512, 405</value>
+    <value>602, 405</value>
   </data>
   <data name="dataGridViewLocal.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -259,10 +259,10 @@
     <value>4</value>
   </data>
   <data name="dataGridViewGlobal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>565, 164</value>
+    <value>649, 164</value>
   </data>
   <data name="dataGridViewGlobal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>523, 405</value>
+    <value>613, 405</value>
   </data>
   <data name="dataGridViewGlobal.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -319,7 +319,7 @@
     <value>NoControl</value>
   </data>
   <data name="label_Local.Location" type="System.Drawing.Point, System.Drawing">
-    <value>112, 132</value>
+    <value>139, 132</value>
   </data>
   <data name="label_Local.Size" type="System.Drawing.Size, System.Drawing">
     <value>301, 29</value>
@@ -349,7 +349,7 @@
     <value>Modern No. 20, 20.25pt</value>
   </data>
   <data name="label_Global.Location" type="System.Drawing.Point, System.Drawing">
-    <value>673, 132</value>
+    <value>831, 132</value>
   </data>
   <data name="label_Global.Size" type="System.Drawing.Size, System.Drawing">
     <value>312, 29</value>
@@ -1471,7 +1471,7 @@
 </value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1100, 782</value>
+    <value>1270, 782</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 9.75pt</value>

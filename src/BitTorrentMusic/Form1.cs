@@ -62,6 +62,7 @@ namespace BitTorrentMusic
                     int year = (int)tag.Tag.Year;
                     TimeSpan duration = tag.Properties.Duration;
                     long size = new FileInfo(file).Length;
+                    string featuring = tag.Tag.JoinedPerformers ?? "Unknown";
 
                     // 20MB limit
                     if (size > 20 * 1024 * 1024)
@@ -73,6 +74,7 @@ namespace BitTorrentMusic
                         year,
                         duration.ToString(@"mm\:ss"),
                         $"{Math.Round(size / 1024f / 1024f, 2)} MB",
+                        featuring,
                         file
                     );
                 }
@@ -138,6 +140,7 @@ namespace BitTorrentMusic
             dataGridViewLocal.Columns.Add("Year", "Année");
             dataGridViewLocal.Columns.Add("Duration", "Durée");
             dataGridViewLocal.Columns.Add("Size", "Taille");
+            dataGridViewLocal.Columns.Add("Featuring", "Featuring");
 
             var pathCol = new DataGridViewTextBoxColumn();
             pathCol.Name = "Path";
@@ -155,6 +158,7 @@ namespace BitTorrentMusic
             dataGridViewGlobal.Columns.Add("Year", "Année");
             dataGridViewGlobal.Columns.Add("Duration", "Durée");
             dataGridViewGlobal.Columns.Add("Size", "Taille");
+            dataGridViewGlobal.Columns.Add("Featuring", "Featuring");
 
             var hashCol = new DataGridViewTextBoxColumn();
             hashCol.Name = "Hash";
@@ -192,15 +196,6 @@ namespace BitTorrentMusic
             grid.GridColor = Color.Black;
 
             grid.RowHeadersVisible = false;
-
-            // No weird alternating transparency
-            grid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            grid.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            grid.DefaultCellStyle.Font = new Font("Segoe UI", 10);
-            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-
-
         }
 
         private void TimoutDelayPicker_Scroll(object sender, EventArgs e)
