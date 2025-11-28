@@ -104,6 +104,30 @@ namespace BitTorrentMusic
            // protocol.AskCatalog(targetName);
 
         }
+        /*
+        private void dataGridViewGlobal_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            // 1. Берём заголовок трека (не обязательно)
+            string title = dataGridViewGlobal.Rows[e.RowIndex].Cells["Title"].Value.ToString();
+
+            // 2. Берём хэш MP3
+            string hash = dataGridViewGlobal.Rows[e.RowIndex].Cells["Hash"].Value.ToString();
+
+            // 3. Берём размер чтобы понять диапазоны
+            string sizeStr = dataGridViewGlobal.Rows[e.RowIndex].Cells["Size"].Value.ToString();
+            int size = ParseSizeToBytes(sizeStr);
+
+            // 4. Узнаём у кого скачиваем
+            string target = "ip_or_name_mediatheque"; // позже подставишь значение
+
+            // 5. Запрашиваем файл
+            protocol.AskMedia(target, 0, size - 1, hash);
+
+            MessageBox.Show($"Downloading: {title}");
+        }
+        */
 
         // Browse local files Button
         private void button1_Click_1(object sender, EventArgs e)
