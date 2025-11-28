@@ -126,7 +126,7 @@
     <value>NoControl</value>
   </data>
   <data name="request_global_catalog.Location" type="System.Drawing.Point, System.Drawing">
-    <value>374, 613</value>
+    <value>798, 644</value>
   </data>
   <data name="request_global_catalog.Size" type="System.Drawing.Size, System.Drawing">
     <value>339, 76</value>
@@ -160,7 +160,7 @@
     <value>649, 21</value>
   </data>
   <data name="Browse_button.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 28</value>
+    <value>119, 38</value>
   </data>
   <data name="Browse_button.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -217,7 +217,7 @@
     <value>NoControl</value>
   </data>
   <data name="TimoutDelayPicker.Location" type="System.Drawing.Point, System.Drawing">
-    <value>340, 59</value>
+    <value>333, 77</value>
   </data>
   <data name="TimoutDelayPicker.Size" type="System.Drawing.Size, System.Drawing">
     <value>150, 30</value>
@@ -238,10 +238,10 @@
     <value>5</value>
   </data>
   <data name="dataGridViewLocal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 164</value>
+    <value>12, 186</value>
   </data>
   <data name="dataGridViewLocal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>602, 405</value>
+    <value>938, 405</value>
   </data>
   <data name="dataGridViewLocal.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -259,10 +259,10 @@
     <value>4</value>
   </data>
   <data name="dataGridViewGlobal.Location" type="System.Drawing.Point, System.Drawing">
-    <value>649, 164</value>
+    <value>989, 186</value>
   </data>
   <data name="dataGridViewGlobal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>613, 405</value>
+    <value>893, 405</value>
   </data>
   <data name="dataGridViewGlobal.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -286,7 +286,7 @@
     <value>Modern No. 20, 15.75pt</value>
   </data>
   <data name="labelTimeout.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 59</value>
+    <value>12, 77</value>
   </data>
   <data name="labelTimeout.Size" type="System.Drawing.Size, System.Drawing">
     <value>315, 24</value>
@@ -319,7 +319,7 @@
     <value>NoControl</value>
   </data>
   <data name="label_Local.Location" type="System.Drawing.Point, System.Drawing">
-    <value>139, 132</value>
+    <value>306, 145</value>
   </data>
   <data name="label_Local.Size" type="System.Drawing.Size, System.Drawing">
     <value>301, 29</value>
@@ -349,7 +349,7 @@
     <value>Modern No. 20, 20.25pt</value>
   </data>
   <data name="label_Global.Location" type="System.Drawing.Point, System.Drawing">
-    <value>831, 132</value>
+    <value>1271, 145</value>
   </data>
   <data name="label_Global.Size" type="System.Drawing.Size, System.Drawing">
     <value>312, 29</value>
@@ -1471,7 +1471,7 @@
 </value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>1270, 782</value>
+    <value>1894, 798</value>
   </data>
   <data name="$this.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 9.75pt</value>

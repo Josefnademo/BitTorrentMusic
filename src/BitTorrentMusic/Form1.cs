@@ -17,9 +17,13 @@ namespace BitTorrentMusic
 {
     public partial class MainMenuUI : Form
     {
+        private IProtocol protocol;
+
+
         public MainMenuUI()
         {
             InitializeComponent();
+          //  protocol = new NetworkProtocol(); //MQTT realisation
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -97,6 +101,7 @@ namespace BitTorrentMusic
         // request global catalog Button
         private void button1_Click(object sender, EventArgs e)
         {
+           // protocol.AskCatalog(targetName);
 
         }
 
