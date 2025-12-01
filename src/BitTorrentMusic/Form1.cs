@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;          // Для работы с Directory, FileInfo, Path
+using System.IO;          // To work with Directory, FileInfo, Path
 using System.Diagnostics;
 using TagLib;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -23,7 +23,7 @@ namespace BitTorrentMusic
         public MainMenuUI()
         {
             InitializeComponent();
-          //  protocol = new NetworkProtocol(); //MQTT realisation
+            protocol = new NetworkProtocol("YosefLocal"); //MQTT realisation
         }
 
         private void Form1_Load(object sender, EventArgs e)
