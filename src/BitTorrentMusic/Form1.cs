@@ -24,6 +24,11 @@ namespace BitTorrentMusic
         {
             InitializeComponent();
             protocol = new NetworkProtocol("YosefLocal"); //MQTT realisation
+
+            // Setting up delegates so the protocol can retrieve data from the DataGridView
+            protocol.LocalCatalogProvider = GetLocalSongs;
+            protocol.LocalPathProvider = GetLocalSongPath;
+
         }
 
         private void Form1_Load(object sender, EventArgs e)

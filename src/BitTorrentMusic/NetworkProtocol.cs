@@ -1,132 +1,198 @@
-﻿using System;
+﻿using MQTTnet;
+using MQTTnet.Client;
+using MQTTnet.Client.Options;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
-using System.Text;
 using System.Text.Json;
-using MQTTnet;
-//using MQTTnet.Client;
-//using MQTTnet.Client.Options;
 using System.Threading.Tasks;
 
 namespace BitTorrentMusic
 {
-    /// <summary>
-    /// Implements the IProtocol interface for sending/receiving song catalogs and media files.
-    /// Integrates FileTransferService for safe file transfer with SHA256 verification.
-    /// </summary>
     public class NetworkProtocol : IProtocol
     {
         private readonly FileTransferService fileTransferService;
-
-        // Store catalogs of other online mediatheques
         private readonly Dictionary<string, List<ISong>> onlineCatalogs;
-
-        // Example list of known mediatheques (can be IPs or names)
         private readonly List<string> onlineMediatheques;
+        private IMqttClient client;
+        private readonly string myName;
 
-        public NetworkProtocol()
+        private const string ONLINE_TOPIC = "music/online";
+        private const string CATALOG_TOPIC = "music/catalog";
+        private const string FILE_REQUEST_TOPIC = "music/file/request";
+        private const string FILE_CHUNK_TOPIC = "music/file/chunk";
+
+        public NetworkProtocol(string name)
         {
+            myName = name;
             fileTransferService = new FileTransferService();
             onlineCatalogs = new Dictionary<string, List<ISong>>();
             onlineMediatheques = new List<string>();
+            _ = InitializeMqtt();
         }
 
-        /// <summary>
-        /// Get the list of all online mediatheques
-        /// </summary>
-        public string[] GetOnlineMediatheque()
+        private async Task InitializeMqtt()
         {
-            // Return a copy to prevent modification from outside
-            return onlineMediatheques.ToArray();
+            var factory = new MqttFactory();
+            client = factory.CreateMqttClient();
+
+            var options = new MqttClientOptionsBuilder()
+                .WithClientId(myName)
+                .WithTcpServer("localhost", 1883)
+                .Build();
+
+            client.UseConnectedHandler(async _ =>
+            {
+                await client.SubscribeAsync(ONLINE_TOPIC);
+                await client.SubscribeAsync(CATALOG_TOPIC);
+                await client.SubscribeAsync(FILE_REQUEST_TOPIC);
+                await client.SubscribeAsync(FILE_CHUNK_TOPIC);
+            });
+
+            client.UseApplicationMessageReceivedHandler(OnMessage);
+            await client.ConnectAsync(options);
         }
 
-        /// <summary>
-        /// Send an "I'm online" message to notify other mediatheques
-        /// </summary>
+        private void OnMessage(MqttApplicationMessageReceivedEventArgs e)
+        {
+            string json = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+            var msg = JsonSerializer.Deserialize<Message>(json);
+            if (msg == null || msg.Sender == myName) return;
+
+            switch (msg.Action)
+            {
+                case "ONLINE":
+                    if (!onlineMediatheques.Contains(msg.Sender))
+                        onlineMediatheques.Add(msg.Sender);
+                    break;
+
+                case "CATALOG_REQUEST":
+                    SendCatalog(msg.Sender);
+                    break;
+
+                case "CATALOG_RESPONSE":
+                    if (msg.SongList != null)
+                        onlineCatalogs[msg.Sender] = msg.SongList;
+                    break;
+
+                case "FILE_REQUEST":
+                    if (msg.StartByte.HasValue && msg.EndByte.HasValue)
+                        SendMedia(msg.Sender, msg.StartByte.Value, msg.EndByte.Value, msg.Hash);
+                    break;
+
+                case "FILE_CHUNK":
+                    if (msg.SongData != null && msg.StartByte.HasValue)
+                    {
+                        byte[] chunk = Convert.FromBase64String(msg.SongData);
+                        fileTransferService.AddChunk(msg.Hash, msg.StartByte.Value, chunk);
+                    }
+                    break;
+            }
+        }
+
+        private async void Publish(string topic, Message msg)
+        {
+            if (client == null || !client.IsConnected) return;
+
+            string json = JsonSerializer.Serialize(msg);
+            var mqttMsg = new MqttApplicationMessageBuilder()
+                .WithTopic(topic)
+                .WithPayload(json)
+                .WithAtLeastOnceQoS()
+                .Build();
+
+            await client.PublishAsync(mqttMsg);
+        }
+
+        public string[] GetOnlineMediatheque() => onlineMediatheques.ToArray();
+
         public void SayOnline()
         {
-            // TODO: send a network broadcast via MQTT/TCP to announce presence
-            // Example: publish message {Action = "Online", Sender = thisMediatheque}
+            var msg = new Message { Action = "ONLINE", Sender = myName };
+            Publish(ONLINE_TOPIC, msg);
             Console.WriteLine("Announcing online status to network...");
         }
 
-        /// <summary>
-        /// Request the catalog of a specific mediatheque
-        /// </summary>
         public List<ISong> AskCatalog(string name)
         {
-            // TODO: send a network request asking for the catalog
-            // For now, return stored catalog if available
-            if (onlineCatalogs.ContainsKey(name))
-                return onlineCatalogs[name];
-            else
-                return new List<ISong>();
+            Publish(CATALOG_TOPIC, new Message
+            {
+                Action = "CATALOG_REQUEST",
+                Sender = myName,
+                Recipient = name
+            });
+
+            return onlineCatalogs.ContainsKey(name) ? onlineCatalogs[name] : new List<ISong>();
         }
 
-        /// <summary>
-        /// Send our catalog to a specific mediatheque
-        /// </summary>
         public void SendCatalog(string name)
         {
-            // TODO: serialize local catalog and send it over network
-            Console.WriteLine($"Sending catalog to {name}...");
-        }
+            // Берём локальный каталог из Form (через callback или DataGridView)
+            List<ISong> localCatalog = LocalCatalogProvider?.Invoke() ?? new List<ISong>();
 
-        /// <summary>
-        /// Download a media file from another mediatheque by byte range
-        /// </summary>
-        public void AskMedia(string name, int startByte, int endByte)
-        {
-            // TODO: send request for file chunk(s) from "name"
-            // The network response should call AddChunk() in FileTransferService
-            Console.WriteLine($"Requesting media from {name}: bytes {startByte}-{endByte}");
-        }
-
-        /// <summary>
-        /// Send a media file chunk to a requesting mediatheque
-        /// </summary>
-        public void SendMedia(string name, int startByte, int endByte)
-        {
-            // TODO: read file bytes from disk using FileTransferService
-            // and send them to the requester via network
-            Console.WriteLine($"Sending media to {name}: bytes {startByte}-{endByte}");
-        }
-
-        /// <summary>
-        /// Helper method to send a full file by splitting it into chunks
-        /// </summary>
-        public void SendFullFile(string filePath, string recipient)
-        {
-            var chunks = fileTransferService.SplitFile(filePath);
-            string fileHash = fileTransferService.ComputeHash(filePath);
-
-            // Example: send chunks one by one
-            for (int i = 0; i < chunks.Count; i++)
+            Publish(CATALOG_TOPIC, new Message
             {
-                // TODO: send each chunk over network (MQTT/TCP)
-                Console.WriteLine($"Sending chunk {i + 1}/{chunks.Count} to {recipient}");
-            }
+                Action = "CATALOG_RESPONSE",
+                Sender = myName,
+                Recipient = name,
+                SongList = localCatalog
+            });
 
-            Console.WriteLine($"File {filePath} sent to {recipient} with hash {fileHash}");
+            Console.WriteLine($"Sent catalog to {name}");
         }
 
-        /// <summary>
-        /// Helper method to receive a chunk for a file
-        /// </summary>
-        public void ReceiveChunk(string fileName, int index, byte[] chunk)
+        public void AskMedia(string name, int startByte, int endByte, string hash)
         {
-            // Add the chunk to the FileTransferService temporary storage
-            fileTransferService.AddChunk(fileName, index, chunk);
+            Publish(FILE_REQUEST_TOPIC, new Message
+            {
+                Action = "FILE_REQUEST",
+                Sender = myName,
+                Recipient = name,
+                StartByte = startByte,
+                EndByte = endByte,
+                Hash = hash
+            });
+
+            Console.WriteLine($"Requested media from {name}: {startByte}-{endByte}");
         }
 
-        /// <summary>
-        /// Finalize a received file and verify its hash
-        /// </summary>
-        public bool FinalizeReceivedFile(string fileName, string expectedHash, string savePath)
+        public void SendMedia(string name, int startByte, int endByte, string hash)
         {
-            return fileTransferService.TryAssembleFile(fileName, expectedHash, savePath);
+            string path = LocalPathProvider?.Invoke(hash);
+            if (string.IsNullOrEmpty(path) || !File.Exists(path)) return;
+
+            byte[] bytes = File.ReadAllBytes(path);
+            byte[] range = bytes.Skip(startByte).Take(endByte - startByte + 1).ToArray();
+
+            Publish(FILE_CHUNK_TOPIC, new Message
+            {
+                Action = "FILE_CHUNK",
+                Sender = myName,
+                Recipient = name,
+                StartByte = startByte,
+                EndByte = endByte,
+                SongData = Convert.ToBase64String(range),
+                Hash = hash
+            });
+
+            Console.WriteLine($"Sent media chunk {startByte}-{endByte} to {name}");
         }
+
+        public void ReceiveChunk(string hash, int index, byte[] chunk)
+        {
+            fileTransferService.AddChunk(hash, index, chunk);
+        }
+
+        public bool FinalizeReceivedFile(string hash, string expectedHash, string savePath)
+        {
+            return fileTransferService.TryAssembleFile(hash, expectedHash, savePath);
+        }
+
+        // ==================== CALLBACKS ====================
+        // В твоей форме нужно будет присвоить эти делегаты, чтобы NetworkProtocol брал данные из DataGridView
+        public Func<List<ISong>>? LocalCatalogProvider { get; set; }
+        public Func<string, string>? LocalPathProvider { get; set; }
     }
 }
