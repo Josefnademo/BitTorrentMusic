@@ -40,6 +40,7 @@
             labelTimeout = new Label();
             label_Local = new Label();
             label_Global = new Label();
+            buttonRefreshNetwork = new Button();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TimoutDelayPicker).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewLocal).BeginInit();
@@ -114,11 +115,19 @@
             label_Global.BackColor = Color.NavajoWhite;
             label_Global.Name = "label_Global";
             // 
+            // buttonRefreshNetwork
+            // 
+            resources.ApplyResources(buttonRefreshNetwork, "buttonRefreshNetwork");
+            buttonRefreshNetwork.Name = "buttonRefreshNetwork";
+            buttonRefreshNetwork.UseVisualStyleBackColor = true;
+            buttonRefreshNetwork.Click += RefreshGlobalGrid_Click;
+            // 
             // MainMenuUI
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveBorder;
+            Controls.Add(buttonRefreshNetwork);
             Controls.Add(label_Global);
             Controls.Add(label_Local);
             Controls.Add(labelTimeout);
@@ -151,5 +160,6 @@
         private Label labelTimeout;
         private Label label_Local;
         private Label label_Global;
+        private Button buttonRefreshNetwork;
     }
 }

@@ -1,15 +1,19 @@
-﻿using Microsoft.VisualBasic.ApplicationServices;
+﻿using BitTorrentMusic.Models;
+using BitTorrentMusic.Protocol;
+using BitTorrentMusic.Services;
+using Microsoft.VisualBasic.ApplicationServices;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;  // To work with Directory, FileInfo, Path
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;          // To work with Directory, FileInfo, Path
-using System.Diagnostics;
 using TagLib;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -18,6 +22,7 @@ namespace BitTorrentMusic
     public partial class MainMenuUI : Form
     {
         private IProtocol protocol;
+        private readonly Dictionary<string, string> hashToPath = new(StringComparer.OrdinalIgnoreCase);
 
 
         public MainMenuUI()
@@ -25,9 +30,13 @@ namespace BitTorrentMusic
             InitializeComponent();
             protocol = new NetworkProtocol("YosefLocal"); //MQTT realisation
 
-            // Setting up delegates so the protocol can retrieve data from the DataGridView
-            protocol.LocalCatalogProvider = GetLocalSongs;
-            protocol.LocalPathProvider = GetLocalSongPath;
+
+            // wire delegates (protocol will call these when it needs catalog or path)
+            ((NetworkProtocol)protocol).LocalCatalogProvider = GetLocalSongs;
+            ((NetworkProtocol)protocol).LocalPathProvider = GetLocalSongPath;
+
+            // subscribe to file received to add downloaded file to local UI
+            ((NetworkProtocol)protocol).FileReceived += OnFileReceived;
 
         }
 
@@ -66,7 +75,7 @@ namespace BitTorrentMusic
                 {
                     var tag = TagLib.File.Create(file);
 
-                    string title = tag.Tag.Title ?? Path.GetFileNameWithoutExtension(file);
+                    string title = tag.Tag.Title ?? Path.GetFileNameWithoutExtension(file);  // ?? → If Tag = null → take a file name, if it's not take Tag
                     string artist = tag.Tag.FirstPerformer ?? "Unknown";
                     int year = (int)tag.Tag.Year;
                     TimeSpan duration = tag.Properties.Duration;
@@ -77,6 +86,10 @@ namespace BitTorrentMusic
                     if (size > 20 * 1024 * 1024)
                         continue;
 
+                    // compute hash once and store mapping
+                    string hash = Helper.HashFile(file);
+                    hashToPath[hash] = file;
+
                     dataGridViewLocal.Rows.Add(
                         title,
                         artist,
@@ -84,7 +97,8 @@ namespace BitTorrentMusic
                         duration.ToString(@"mm\:ss"),
                         $"{Math.Round(size / 1024f / 1024f, 2)} MB",
                         featuring,
-                        file
+                        file,       // Hidden file column
+                        hash        // Hidden hash column
                     );
                 }
                 catch (Exception ex)
@@ -94,7 +108,74 @@ namespace BitTorrentMusic
             }
         }
 
+        private List<ISong> GetLocalSongs()
+        {
+            var list = new List<ISong>();
+            foreach (DataGridViewRow row in dataGridViewLocal.Rows)
+            {
+                if (row.IsNewRow) continue;
 
+                var s = new Song
+                {
+                    Title = row.Cells["Title"].Value?.ToString() ?? "",    // ?. → it's used for : Try calling .ToString(), but if the object on the left is null, don't call anything, just return null.
+                    Artist = row.Cells["Artist"].Value?.ToString() ?? "",  // ?? → If the result is null, substitute an empty string "" like this we have just an empty string
+                    Year = int.TryParse(row.Cells["Year"].Value?.ToString(), out int y) ? y : 0,
+                    Duration = TimeSpan.TryParse(row.Cells["Duration"].Value?.ToString(), out TimeSpan t) ? t : TimeSpan.Zero,
+                    Size = ParseSizeToBytes(row.Cells["Size"].Value?.ToString()),
+                    Featuring = (row.Cells["Featuring"].Value?.ToString() ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries),
+                    Hash = row.Cells["Hash"].Value?.ToString() ?? ""
+                };
+                list.Add(s);
+            }
+            return list;
+        }
+
+        private string GetLocalSongPath(string hash)
+        {
+            if (string.IsNullOrEmpty(hash)) return "";
+            return hashToPath.TryGetValue(hash, out var path) ? path : "";
+        }
+
+        // called when a file is received & verified by NetworkProtocol
+        private void OnFileReceived(string hash, string savedPath)
+        {
+            // add to mapping and UI (if not already)
+            if (!hashToPath.ContainsKey(hash))
+                hashToPath[hash] = savedPath;
+
+            // add to grid on UI thread
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(() => AddDownloadedFileToGrid(savedPath, hash)));
+            }
+            else AddDownloadedFileToGrid(savedPath, hash);
+        }
+
+        private void AddDownloadedFileToGrid(string path, string hash)
+        {
+            try
+            {
+                var tag = TagLib.File.Create(path);
+                string title = tag.Tag.Title ?? Path.GetFileNameWithoutExtension(path);
+                string artist = tag.Tag.FirstPerformer ?? "Unknown";
+                int year = (int)tag.Tag.Year;
+                TimeSpan duration = tag.Properties.Duration;
+                long size = new FileInfo(path).Length;
+                string featuring = tag.Tag.JoinedPerformers ?? "Unknown";
+
+                dataGridViewLocal.Rows.Add(
+                    title,
+                    artist,
+                    year,
+                    duration.ToString(@"mm\:ss"),
+                    $"{Math.Round(size / 1024f / 1024f, 2)} MB",
+                    featuring,
+                    path,
+                    hash
+                );
+            }
+            catch { /* ignore tag/read errors */ }
+        }
 
         private void LoadGlobalSongs(string folderPath)
         {
@@ -104,35 +185,61 @@ namespace BitTorrentMusic
         }
 
         // request global catalog Button
-        private void button1_Click(object sender, EventArgs e)
+        private async void button1_Click(object sender, EventArgs e)
         {
-           // protocol.AskCatalog(targetName);
+            // broadcast catalog request
+            protocol.AskCatalog("*");
 
+            // wait shortly for responses (simple approach)
+            await Task.Delay(700);
+
+            // read aggregated catalog if available (NetworkProtocol exposes GetAggregatedCatalog method)
+            if (protocol is NetworkProtocol net)
+            {
+                var rows = net.GetAggregatedCatalog();
+                dataGridViewGlobal.Rows.Clear();
+                foreach (var (song, peer) in rows)
+                {
+                    dataGridViewGlobal.Rows.Add(
+                        song.Title,
+                        song.Artist,
+                        song.Year,
+                        song.Duration.ToString(@"mm\:ss"),
+                        $"{Math.Round(song.Size / 1024.0 / 1024.0, 2)} MB",
+                        string.Join(", ", song.Featuring ?? Array.Empty<string>()),
+                        song.Hash,
+                        peer
+                    );
+                }
+            }
         }
-        /*
+
+        private int ParseSizeToBytes(string? sizeStr)
+        {
+            if (string.IsNullOrEmpty(sizeStr)) return 0;
+            if (sizeStr!.EndsWith("MB", StringComparison.OrdinalIgnoreCase) &&
+                float.TryParse(sizeStr.Replace("MB", "").Trim(), out float mb))
+            {
+                return (int)(mb * 1024f * 1024f);
+            }
+            if (int.TryParse(sizeStr, out int val)) return val;
+            return 0;
+        }
+
+        // double-click to download a song
         private void dataGridViewGlobal_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
 
-            // 1. Берём заголовок трека (не обязательно)
-            string title = dataGridViewGlobal.Rows[e.RowIndex].Cells["Title"].Value.ToString();
+            var row = dataGridViewGlobal.Rows[e.RowIndex];
+            string hash = row.Cells["Hash"].Value?.ToString() ?? "";
+            string source = row.Cells["Source"].Value?.ToString() ?? "";
 
-            // 2. Берём хэш MP3
-            string hash = dataGridViewGlobal.Rows[e.RowIndex].Cells["Hash"].Value.ToString();
+            if (string.IsNullOrEmpty(hash)) return;
 
-            // 3. Берём размер чтобы понять диапазоны
-            string sizeStr = dataGridViewGlobal.Rows[e.RowIndex].Cells["Size"].Value.ToString();
-            int size = ParseSizeToBytes(sizeStr);
-
-            // 4. Узнаём у кого скачиваем
-            string target = "ip_or_name_mediatheque"; // позже подставишь значение
-
-            // 5. Запрашиваем файл
-            protocol.AskMedia(target, 0, size - 1, hash);
-
-            MessageBox.Show($"Downloading: {title}");
+            Console.WriteLine($"Download {hash} from {source}");
+            ((NetworkProtocol)protocol).AskMedia(source, hash);
         }
-        */
 
         // Browse local files Button
         private void button1_Click_1(object sender, EventArgs e)
@@ -176,12 +283,11 @@ namespace BitTorrentMusic
             dataGridViewLocal.Columns.Add("Size", "Taille");
             dataGridViewLocal.Columns.Add("Featuring", "Featuring");
 
-            var pathCol = new DataGridViewTextBoxColumn();
-            pathCol.Name = "Path";
-            pathCol.HeaderText = "Chemin";
-            pathCol.Visible = false;
-
+            var pathCol = new DataGridViewTextBoxColumn { Name = "Path", HeaderText = "Chemin", Visible = false };
             dataGridViewLocal.Columns.Add(pathCol);
+
+            var hashCol = new DataGridViewTextBoxColumn { Name = "Hash", HeaderText = "Hash", Visible = false };
+            dataGridViewLocal.Columns.Add(hashCol);
         }
         private void SetupGlobalGrid()
         {
@@ -194,11 +300,11 @@ namespace BitTorrentMusic
             dataGridViewGlobal.Columns.Add("Size", "Taille");
             dataGridViewGlobal.Columns.Add("Featuring", "Featuring");
 
-            var hashCol = new DataGridViewTextBoxColumn();
-            hashCol.Name = "Hash";
-            hashCol.Visible = false;
-
+            var hashCol = new DataGridViewTextBoxColumn { Name = "Hash", HeaderText = "Hash", Visible = false };
             dataGridViewGlobal.Columns.Add(hashCol);
+
+            var sourceCol = new DataGridViewTextBoxColumn { Name = "Source", HeaderText = "Source", Visible = true };
+            dataGridViewGlobal.Columns.Add(sourceCol);
         }
 
 
@@ -235,6 +341,38 @@ namespace BitTorrentMusic
         private void TimoutDelayPicker_Scroll(object sender, EventArgs e)
         {
 
+        }
+
+        private void buttonRefreshNetwork_Click(object sender, EventArgs e)
+        {
+            ((NetworkProtocol)protocol).SayOnline();
+            ((NetworkProtocol)protocol).AskCatalog("*");
+            Task.Delay(1000).ContinueWith(_ => RefreshGlobalGrid());
+        }
+
+        private void RefreshGlobalGrid()
+        {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new Action(RefreshGlobalGrid));
+                return;
+            }
+
+            var songs = ((NetworkProtocol)protocol).GetAllKnownSongs();
+            dataGridViewGlobal.Rows.Clear();
+            foreach (var s in songs)
+            {
+                dataGridViewGlobal.Rows.Add(
+                    s.Title,
+                    s.Artist,
+                    s.Year,
+                    s.Duration.ToString(@"mm\:ss"),
+                    $"{s.Size / 1024f / 1024f:F2} MB",
+                    string.Join(", ", s.Featuring),
+                    s.Hash,
+                    "Network"
+                );
+            }
         }
     }
 }
