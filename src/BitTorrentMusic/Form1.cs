@@ -29,7 +29,7 @@ namespace BitTorrentMusic
         {
             InitializeComponent();
             protocol = new NetworkProtocol("YosefLocal"); //MQTT realisation
-
+            protocol = new NetworkProtocol("User_" + new Random().Next(100, 999));
 
             // wire delegates (protocol will call these when it needs catalog or path)
             ((NetworkProtocol)protocol).LocalCatalogProvider = GetLocalSongs;
@@ -108,9 +108,9 @@ namespace BitTorrentMusic
             }
         }
 
-        private List<ISong> GetLocalSongs()
+        private List<Song> GetLocalSongs()
         {
-            var list = new List<ISong>();
+            var list = new List<Song>();
             foreach (DataGridViewRow row in dataGridViewLocal.Rows)
             {
                 if (row.IsNewRow) continue;
@@ -190,20 +190,19 @@ namespace BitTorrentMusic
             // broadcast catalog request
             protocol.AskCatalog("*");
 
-            // wait shortly for responses (simple approach)
-            await Task.Delay(700);
+            // wait shortly for responses 
+            await Task.Delay(1000);
 
             // read aggregated catalog if available (NetworkProtocol exposes GetAggregatedCatalog method)
             if (protocol is NetworkProtocol net)
             {
-                var rows = net.GetAggregatedCatalog();
+                // Updating the global list
                 dataGridViewGlobal.Rows.Clear();
+                var rows = net.GetAggregatedCatalog();
                 foreach (var (song, peer) in rows)
                 {
                     dataGridViewGlobal.Rows.Add(
-                        song.Title,
-                        song.Artist,
-                        song.Year,
+                        song.Title, song.Artist, song.Year,
                         song.Duration.ToString(@"mm\:ss"),
                         $"{Math.Round(song.Size / 1024.0 / 1024.0, 2)} MB",
                         string.Join(", ", song.Featuring ?? Array.Empty<string>()),
@@ -222,8 +221,7 @@ namespace BitTorrentMusic
             {
                 return (int)(mb * 1024f * 1024f);
             }
-            if (int.TryParse(sizeStr, out int val)) return val;
-            return 0;
+            return int.TryParse(sizeStr, out int val) ? val : 0;
         }
 
         // double-click to download a song
@@ -235,10 +233,11 @@ namespace BitTorrentMusic
             string hash = row.Cells["Hash"].Value?.ToString() ?? "";
             string source = row.Cells["Source"].Value?.ToString() ?? "";
 
-            if (string.IsNullOrEmpty(hash)) return;
-
-            Console.WriteLine($"Download {hash} from {source}");
-            ((NetworkProtocol)protocol).AskMedia(source, hash);
+            if (!string.IsNullOrEmpty(hash) && !string.IsNullOrEmpty(source))
+            {
+                // start the download process
+                ((NetworkProtocol)protocol).AskMedia(source, hash);
+            }
         }
 
         // Browse local files Button
