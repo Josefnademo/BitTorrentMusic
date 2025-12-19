@@ -41,6 +41,7 @@
             label_Local = new Label();
             label_Global = new Label();
             buttonRefreshNetwork = new Button();
+            btnTestSend = new Button();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TimoutDelayPicker).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewLocal).BeginInit();
@@ -120,13 +121,22 @@
             resources.ApplyResources(buttonRefreshNetwork, "buttonRefreshNetwork");
             buttonRefreshNetwork.Name = "buttonRefreshNetwork";
             buttonRefreshNetwork.UseVisualStyleBackColor = true;
-            buttonRefreshNetwork.Click += RefreshGlobalGrid_Click;
+            buttonRefreshNetwork.Click += buttonRefreshNetwork_Click;
+            // 
+            // btnTestSend
+            // 
+            btnTestSend.BackColor = Color.Coral;
+            resources.ApplyResources(btnTestSend, "btnTestSend");
+            btnTestSend.Name = "btnTestSend";
+            btnTestSend.UseVisualStyleBackColor = false;
+            btnTestSend.Click += btnTestSend_Click;
             // 
             // MainMenuUI
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveBorder;
+            Controls.Add(btnTestSend);
             Controls.Add(buttonRefreshNetwork);
             Controls.Add(label_Global);
             Controls.Add(label_Local);
@@ -161,5 +171,6 @@
         private Label label_Local;
         private Label label_Global;
         private Button buttonRefreshNetwork;
+        private Button btnTestSend;
     }
 }

@@ -88,7 +88,7 @@ namespace BitTorrentMusic
         /// </summary>
         private async Task InitializeMqttAsync()
         {
-
+            client = factory.CreateMqttClient();
             // Configure connection options (Server, Port, Credentials)
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(BROKER_HOST, BROKER_PORT)

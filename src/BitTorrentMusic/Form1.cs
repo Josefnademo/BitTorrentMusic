@@ -29,7 +29,7 @@ namespace BitTorrentMusic
         {
             InitializeComponent();
             protocol = new NetworkProtocol("YosefLocal"); //MQTT realisation
-            protocol = new NetworkProtocol("User_" + new Random().Next(100, 999));
+           //protocol = new NetworkProtocol("User_" + new Random().Next(100, 999));
 
             // wire delegates (protocol will call these when it needs catalog or path)
             ((NetworkProtocol)protocol).LocalCatalogProvider = GetLocalSongs;
@@ -372,6 +372,14 @@ namespace BitTorrentMusic
                     "Network"
                 );
             }
+        }
+
+        private void btnTestSend_Click(object sender, EventArgs e)
+        {
+            // "*" broadcast to everyone (MQTTX listener)
+            protocol.SendCatalog("*");
+
+            MessageBox.Show("Catalog sent to MQTT! Check MQTTX.");
         }
     }
 }
