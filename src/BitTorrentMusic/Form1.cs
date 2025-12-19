@@ -28,8 +28,8 @@ namespace BitTorrentMusic
         public MainMenuUI()
         {
             InitializeComponent();
-            protocol = new NetworkProtocol("YosefLocal"); //MQTT realisation
-           //protocol = new NetworkProtocol("User_" + new Random().Next(100, 999));
+            //protocol = new NetworkProtocol("YosefLocal"); //MQTT realisation
+           protocol = new NetworkProtocol("User_" + new Random().Next(100, 999));
 
             // wire delegates (protocol will call these when it needs catalog or path)
             ((NetworkProtocol)protocol).LocalCatalogProvider = GetLocalSongs;
@@ -357,9 +357,13 @@ namespace BitTorrentMusic
                 return;
             }
 
-            var songs = ((NetworkProtocol)protocol).GetAllKnownSongs();
+            // USE GetAggregatedCatalog INSTEAD OF GetAllKnownSongs
+            // To get not only the song, but also the name of the person who owns it (peer)
+            var rows = ((NetworkProtocol)protocol).GetAggregatedCatalog();
+
             dataGridViewGlobal.Rows.Clear();
-            foreach (var s in songs)
+
+            foreach (var (s, peer) in rows)
             {
                 dataGridViewGlobal.Rows.Add(
                     s.Title,
@@ -369,7 +373,7 @@ namespace BitTorrentMusic
                     $"{s.Size / 1024f / 1024f:F2} MB",
                     string.Join(", ", s.Featuring),
                     s.Hash,
-                    "Network"
+                    peer
                 );
             }
         }

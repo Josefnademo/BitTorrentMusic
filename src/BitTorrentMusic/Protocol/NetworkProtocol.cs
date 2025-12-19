@@ -89,6 +89,7 @@ namespace BitTorrentMusic
         private async Task InitializeMqttAsync()
         {
             client = factory.CreateMqttClient();
+
             // Configure connection options (Server, Port, Credentials)
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(BROKER_HOST, BROKER_PORT)
@@ -113,6 +114,7 @@ namespace BitTorrentMusic
                     .WithTopicFilter(topicFilter)
                     .Build();
 
+                // SEND A SUBSCRIPTION REQUEST TO THE BROKER, From this point on, the broker will begin sending us messages
                 // subscribe (use CancellationToken.None)
                 await client.SubscribeAsync(subscribeOptions, CancellationToken.None);
 
@@ -144,22 +146,27 @@ namespace BitTorrentMusic
                 if (msg == null || msg.Sender == myName) return Task.CompletedTask;
 
                 // Ignore messages not intended for us (unless recipient is "*" for broadcast)
-                if (msg.Recipient != "*" && msg.Recipient != myName) return Task.CompletedTask;
+                // Allow "*", "0.0.0.0" and "ALL" as broadcast addresses
+                bool isBroadcast = msg.Recipient == "*" || msg.Recipient == "0.0.0.0" || msg.Recipient == "ALL";
+                if (!isBroadcast && msg.Recipient != myName) return Task.CompletedTask;
 
                 // Handle specific actions
-                switch (msg.Action?.ToLower()) // ?. → if the object on the left is null, don't call anything, just return null.
+                switch (msg.Action) //(msg.Action?.ToLower()) // ?. → if the object on the left is null, don't call anything, just return null.
                 {
                     case "online":
+                    case "askOnline":
                         // Another peer announced they are online. Add to list.
                         onlinePeers.Add(msg.Sender);
+                        if (msg.Action == "askOnline") SayOnline();
                         break;
 
-                    case "requestcatalog":
+                    case "askCatalog":
+                    case "requestCatalog":
                         // Someone asked for our list of songs. Send it.
                         SendCatalog(msg.Sender);
                         break;
 
-                    case "sendcatalog":
+                    case "sendCatalog":
                         // We received a catalog from someone. Store it.
                         if (msg.SongList != null)
                         {
@@ -168,47 +175,27 @@ namespace BitTorrentMusic
                         }
                         break;
 
-                    case "requestchunk":
-                        // Someone wants to download a file from us.
-                        if (msg.StartByte.HasValue && msg.EndByte.HasValue && !string.IsNullOrEmpty(msg.Hash))
+                    case "askMedia":
+                    case "askFile":
+                        // If no data, they are asking for file
+                        if (string.IsNullOrEmpty(msg.SongData))
                         {
-                            SendChunk(msg.Sender, msg.Hash, msg.StartByte.Value, msg.EndByte.Value);
+                            if (!string.IsNullOrEmpty(msg.Hash))
+                                SendChunk(msg.Sender, msg.Hash, 0, int.MaxValue);
+                        }
+                        // If data exists, they are sending a file
+                        else
+                        {
+                            ProcessReceivedChunk(msg);
                         }
                         break;
 
-                    case "sendchunk":
-                        // We received a piece of a file we are downloading.
-                        if (msg.SongData != null && msg.StartByte.HasValue && !string.IsNullOrEmpty(msg.Hash))
-                        {
-                            // Convert Base64 string back to byte array
-                            byte[] chunk = Convert.FromBase64String(msg.SongData);
 
-                            // 1. Initialize receiving storage (if not already done)
-                            fileTransferService.StartReceiving(msg.Hash, 100); 
-
-                            // 2. Add the chunk to memory. 
-                            // calculate the index by dividing start byte by 4096 (ChunkSize)
-                            fileTransferService.AddChunk(msg.Hash, msg.StartByte.Value / 4096, chunk); 
-
-                            // 3. Determine where to save the file
-                            var knownSong = GetAllKnownSongs().FirstOrDefault(s => s.Hash == msg.Hash);
-                            string fileName = knownSong != null ? $"{knownSong.Artist} - {knownSong.Title}.mp3" : $"{msg.Hash}.mp3";
-
-                            string savePath = Path.Combine(
-                                Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
-                                "BitTorrentMusic_Downloads",
-                                fileName
-                            );
-
-                            // 4. Try to assemble the file. 
-                            // If we have all the chunks, this returns true and saves the file to disk.
-                            if (fileTransferService.TryAssembleFile(msg.Hash, msg.Hash, savePath))
-                            {
-                                // Notify UI that download is complete
-                                FileReceived?.Invoke(msg.Hash, savePath);
-                            }
-                        }
+                    case "sendMedia":
+                    case "sendChunk":
+                        ProcessReceivedChunk(msg);
                         break;
+
                 }
             }
             catch (Exception ex)
@@ -216,6 +203,43 @@ namespace BitTorrentMusic
                 Console.WriteLine($"Error processing message: {ex.Message}");
             }
             return Task.CompletedTask;
+        }
+
+        // Helper to avoid duplicate code
+        private void ProcessReceivedChunk(AppMessage msg)
+        {
+            // We received a piece of a file we are downloading.
+            if (msg.SongData != null && msg.StartByte.HasValue && !string.IsNullOrEmpty(msg.Hash))
+            {
+                // Convert Base64 string back to byte array
+                byte[] chunk = Convert.FromBase64String(msg.SongData);
+
+                // 1. Initialize receiving storage (if not already done), Large buffer for receiving
+                fileTransferService.StartReceiving(msg.Hash, 20000);
+
+                // 2. Add the chunk to memory. 
+                // calculate the index by dividing start byte by 4096 (ChunkSize)
+                int index = msg.StartByte.Value / 4096;
+                fileTransferService.AddChunk(msg.Hash, index, chunk);
+
+                // 3. Determine where to save the file
+                var knownSong = GetAllKnownSongs().FirstOrDefault(s => s.Hash == msg.Hash);
+                string fileName = knownSong != null ? $"{knownSong.Artist} - {knownSong.Title}.mp3" : $"{msg.Hash}.mp3";
+
+                string savePath = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
+                    "BitTorrentMusic_Downloads",
+                    fileName
+                );
+
+                // 4. Try to assemble the file. 
+                // If we have all the chunks, this returns true and saves the file to disk.
+                if (fileTransferService.TryAssembleFile(msg.Hash, msg.Hash, savePath))
+                {
+                    // Notify UI that download is complete
+                    FileReceived?.Invoke(msg.Hash, savePath);
+                }
+            }
         }
 
         /// <summary>
@@ -287,7 +311,7 @@ namespace BitTorrentMusic
             // Request the FULL file (from byte 0 to End)
             Publish(new AppMessage
             {
-                Action = "requestChunk",
+                Action = "askMedia", // WAS "requestChunk" -> CHANGE TO "askMedia"
                 Sender = myName,
                 Recipient = peer,
                 Hash = hash,
@@ -314,7 +338,7 @@ namespace BitTorrentMusic
                 // Send each chunk as a separate message
                 Publish(new AppMessage
                 {
-                    Action = "sendChunk",
+                    Action = "sendMedia", // WAS "sendChunk" -> CHANGE TO "sendMedia"
                     Sender = myName,
                     Recipient = recipient,
                     Hash = hash,
