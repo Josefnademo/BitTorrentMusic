@@ -42,6 +42,7 @@
             label_Global = new Label();
             buttonRefreshNetwork = new Button();
             btnTestSend = new Button();
+            label_Timout = new Label();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TimoutDelayPicker).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewLocal).BeginInit();
@@ -131,11 +132,19 @@
             btnTestSend.UseVisualStyleBackColor = false;
             btnTestSend.Click += btnTestSend_Click;
             // 
+            // label_Timout
+            // 
+            resources.ApplyResources(label_Timout, "label_Timout");
+            label_Timout.BackColor = Color.RosyBrown;
+            label_Timout.Name = "label_Timout";
+            label_Timout.Click += label1_Click;
+            // 
             // MainMenuUI
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveBorder;
+            Controls.Add(label_Timout);
             Controls.Add(btnTestSend);
             Controls.Add(buttonRefreshNetwork);
             Controls.Add(label_Global);
@@ -172,5 +181,6 @@
         private Label label_Global;
         private Button buttonRefreshNetwork;
         private Button btnTestSend;
+        private Label label_Timout;
     }
 }
