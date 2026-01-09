@@ -43,6 +43,7 @@
             buttonRefreshNetwork = new Button();
             btnTestSend = new Button();
             label_Timout = new Label();
+            btnDownload = new Button();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)TimoutDelayPicker).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridViewLocal).BeginInit();
@@ -139,11 +140,20 @@
             label_Timout.Name = "label_Timout";
             label_Timout.Click += label1_Click;
             // 
+            // btnDownload
+            // 
+            btnDownload.BackColor = Color.MediumPurple;
+            resources.ApplyResources(btnDownload, "btnDownload");
+            btnDownload.Name = "btnDownload";
+            btnDownload.UseVisualStyleBackColor = false;
+            btnDownload.Click += button1_Click_2;
+            // 
             // MainMenuUI
             // 
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveBorder;
+            Controls.Add(btnDownload);
             Controls.Add(label_Timout);
             Controls.Add(btnTestSend);
             Controls.Add(buttonRefreshNetwork);
@@ -182,5 +192,6 @@
         private Button buttonRefreshNetwork;
         private Button btnTestSend;
         private Label label_Timout;
+        private Button btnDownload;
     }
 }

@@ -173,8 +173,14 @@ namespace BitTorrentMusic
                     path,
                     hash
                 );
+                MessageBox.Show($"File successfully downloaded!\nSaved in: {path}",
+                             "Download Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch { /* ignore tag/read errors */ }
+            catch (Exception ex)
+            {
+                // If there was an error reading tags, the file still downloaded, but the tags were not read
+                MessageBox.Show($"The file was downloaded, but there was an error reading tags: {path}", "Warning");
+            }
         }
 
         private void LoadGlobalSongs(string folderPath)
@@ -233,8 +239,15 @@ namespace BitTorrentMusic
             string hash = row.Cells["Hash"].Value?.ToString() ?? "";
             string source = row.Cells["Source"].Value?.ToString() ?? "";
 
+            // get the song title for beauty
+            string title = row.Cells["Title"].Value?.ToString() ?? "Unknown";
+
             if (!string.IsNullOrEmpty(hash) && !string.IsNullOrEmpty(source))
             {
+                // download message
+                MessageBox.Show($"The request has been sent to the user. {source}.\nDownload: {title}...",
+                                "Download Started", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                 // start the download process
                 ((NetworkProtocol)protocol).AskMedia(source, hash);
             }
@@ -335,7 +348,11 @@ namespace BitTorrentMusic
             grid.GridColor = Color.Black;
 
             grid.RowHeadersVisible = false;
+            grid.ReadOnly = true; // Disables editing (removes blinking)
+            grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect; // Selects the entire row, not just one cell
+            grid.MultiSelect = false; // Allows you to select only one song at a time
         }
+
 
         private void TimoutDelayPicker_Scroll(object sender, EventArgs e)
         {
@@ -388,6 +405,31 @@ namespace BitTorrentMusic
 
         private void label1_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {// if song was selected
+            if (dataGridViewGlobal.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Please select a song from the list");
+                return;
+            }
+
+            // taking firs line selected
+            var row = dataGridViewGlobal.SelectedRows[0];
+
+            string hash = row.Cells["Hash"].Value?.ToString() ?? "";
+            string source = row.Cells["Source"].Value?.ToString() ?? "";
+            string title = row.Cells["Title"].Value?.ToString() ?? "Unknown";
+
+            if (!string.IsNullOrEmpty(hash) && !string.IsNullOrEmpty(source))
+            {
+                MessageBox.Show($"Request sent to user {source}.\nDownload: {title}...",
+                                "Download Started", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                ((NetworkProtocol)protocol).AskMedia(source, hash);
+            }
 
         }
     }

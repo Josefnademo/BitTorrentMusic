@@ -226,11 +226,14 @@ namespace BitTorrentMusic
                 var knownSong = GetAllKnownSongs().FirstOrDefault(s => s.Hash == msg.Hash);
                 string fileName = knownSong != null ? $"{knownSong.Artist} - {knownSong.Title}.mp3" : $"{msg.Hash}.mp3";
 
-                string savePath = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
-                    "BitTorrentMusic_Downloads",
-                    fileName
-                );
+                // base path
+                string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                // Go up 3 levels (to .sln)
+                string solutionDir = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..\..\"));
+                // Forming the final path
+                string saveFolder = Path.Combine(solutionDir, "BitTorrentMusic_Downloads");
+
+                string savePath = Path.Combine(saveFolder, fileName);
 
                 // 4. Try to assemble the file. 
                 // If we have all the chunks, this returns true and saves the file to disk.

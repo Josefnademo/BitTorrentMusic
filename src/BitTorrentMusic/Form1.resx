@@ -148,7 +148,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;request_global_catalog.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>12</value>
   </data>
   <data name="Browse_button.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 11.249999pt</value>
@@ -178,7 +178,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;Browse_button.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>11</value>
   </data>
   <data name="textBox_Research.Font" type="System.Drawing.Font, System.Drawing">
     <value>Modern No. 20, 11.999998pt</value>
@@ -205,7 +205,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;textBox_Research.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>10</value>
   </data>
   <metadata name="bindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
@@ -235,7 +235,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;TimoutDelayPicker.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>9</value>
   </data>
   <data name="dataGridViewLocal.Location" type="System.Drawing.Point, System.Drawing">
     <value>12, 186</value>
@@ -256,7 +256,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dataGridViewLocal.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>8</value>
   </data>
   <data name="dataGridViewGlobal.Location" type="System.Drawing.Point, System.Drawing">
     <value>989, 186</value>
@@ -277,7 +277,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;dataGridViewGlobal.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>7</value>
   </data>
   <data name="labelTimeout.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -307,7 +307,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTimeout.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="label_Local.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -340,7 +340,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label_Local.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="label_Global.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -370,7 +370,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label_Global.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="buttonRefreshNetwork.Font" type="System.Drawing.Font, System.Drawing">
     <value>Poor Richard, 15.75pt</value>
@@ -397,7 +397,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;buttonRefreshNetwork.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="btnTestSend.Font" type="System.Drawing.Font, System.Drawing">
     <value>Poor Richard, 15.75pt</value>
@@ -424,7 +424,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnTestSend.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="label_Timout.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -454,13 +454,40 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;label_Timout.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnDownload.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Poor Richard, 15.75pt</value>
+  </data>
+  <data name="btnDownload.Location" type="System.Drawing.Point, System.Drawing">
+    <value>1645, 646</value>
+  </data>
+  <data name="btnDownload.Size" type="System.Drawing.Size, System.Drawing">
+    <value>223, 78</value>
+  </data>
+  <data name="btnDownload.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="btnDownload.Text" xml:space="preserve">
+    <value>Download selected song</value>
+  </data>
+  <data name="&gt;&gt;btnDownload.Name" xml:space="preserve">
+    <value>btnDownload</value>
+  </data>
+  <data name="&gt;&gt;btnDownload.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnDownload.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnDownload.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>25</value>
+    <value>33</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>7, 15</value>
